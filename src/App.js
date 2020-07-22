@@ -1,0 +1,92 @@
+import React from 'react';
+import { Paper, Table, TableBody, TableCell, TableRow, TableContainer, TableHead, TablePagination, IconButton } from '@material-ui/core';
+import { usersList } from "./UsersData"
+import { Edit, Delete } from '@material-ui/icons';
+import UserDetails from './UserDetails';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = ({
+      isLoading: true,
+      users: [],
+      page: 0,
+      rowsPerPage: 5,
+      view: false,
+      user: {}
+    });
+  }
+
+  componentDidMount() {
+    this.setState({ ...this.state, users: usersList.usersList, isLoading: false });
+  }
+
+  handleChangePage = (event, newPage) => {
+    this.setState({ ...this.state, page: newPage })
+  };
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({ ...this.state, page: 0, rowsPerPage: event.target.value })
+  };
+
+  onViewOpen = (row) => {
+    this.setState({ ...this.state, view: true, user: row })
+  }
+
+  onViewClose = () => {
+    this.setState({ ...this.state, view: false })
+  }
+
+  onDelete = (row) => {
+    this.setState({ ...this.state, users: this.state.users.filter((u) => u.userId !== row.userId) })
+  }
+
+  render() {
+
+
+    return (
+      <Paper>
+        <h2>Users</h2>{!this.state.isLoading ? <><TableContainer>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell >Serial Number</TableCell>
+                <TableCell >First Name</TableCell>
+                <TableCell >Last Name</TableCell>
+                <TableCell >Email</TableCell>
+                <TableCell >Contact no</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.users.length > 0 && this.state.users.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((row, i) => (
+                <TableRow key={i}>
+                  <TableCell >{row.userId}</TableCell>
+                  <TableCell >{row.firstName}</TableCell>
+                  <TableCell >{row.lastName}</TableCell>
+                  <TableCell >{row.email}</TableCell>
+                  <TableCell >{row.contactNumber}</TableCell>
+                  <TableCell align="right"><IconButton onClick={() => this.onViewOpen(row)}><Edit /></IconButton><IconButton onClick={() => this.onDelete(row)}><Delete /></IconButton></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={this.state.users.length}
+            rowsPerPage={this.state.rowsPerPage}
+            page={this.state.page}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          /></> : <h5>Loading...Please wait...</h5>}
+
+
+        {this.state.view && <UserDetails handleModalClose={this.onViewClose} user={this.state.user} />}
+      </Paper>
+    )
+  }
+
+};
+export default (App);
