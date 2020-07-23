@@ -1,8 +1,23 @@
 import React from 'react';
+import { withStyles } from "@material-ui/core/styles";
 import { Paper, Table, TableBody, TableCell, TableRow, TableContainer, TableHead, TablePagination, IconButton } from '@material-ui/core';
-import { usersList } from "./UsersData"
-import { Edit, Delete } from '@material-ui/icons';
+import { usersList } from "./../UsersData"
+import { Visibility, Delete } from '@material-ui/icons';
 import UserDetails from './UserDetails';
+
+const styles = theme => ({
+  container: {
+    padding:'2rem'
+  },
+  heading: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  table: {
+    border: '1px solid #000',
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -43,10 +58,10 @@ class App extends React.Component {
 
   render() {
 
-
+    const { classes } = this.props;
     return (
-      <Paper>
-        <h2>Users</h2>{!this.state.isLoading ? <><TableContainer>
+      <Paper className={classes.container}>
+        <h2 className={classes.heading}>Users</h2>{!this.state.isLoading ? <><TableContainer className={classes.table}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -66,7 +81,7 @@ class App extends React.Component {
                   <TableCell >{row.lastName}</TableCell>
                   <TableCell >{row.email}</TableCell>
                   <TableCell >{row.contactNumber}</TableCell>
-                  <TableCell align="right"><IconButton onClick={() => this.onViewOpen(row)}><Edit /></IconButton><IconButton onClick={() => this.onDelete(row)}><Delete /></IconButton></TableCell>
+                  <TableCell align="right"><IconButton onClick={() => this.onViewOpen(row)}><Visibility /></IconButton><IconButton onClick={() => this.onDelete(row)}><Delete /></IconButton></TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -89,4 +104,4 @@ class App extends React.Component {
   }
 
 };
-export default (App);
+export default withStyles(styles, { withTheme: true })(App);
