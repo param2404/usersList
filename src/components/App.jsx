@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import { Paper, Table, TableBody, TableCell, TableRow, TableContainer, TableHead, TablePagination, IconButton } from '@material-ui/core';
-import { usersList } from "./../UsersData"
+import { usersList } from "../UsersData"
 import { Visibility, Delete } from '@material-ui/icons';
 import UserDetails from './UserDetails';
 
